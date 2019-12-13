@@ -1,9 +1,12 @@
 package com.example.internalstorageapp.view;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.internalstorageapp.R;
 import com.example.internalstorageapp.adapter.ReceiptAdapter;
+import com.example.internalstorageapp.adapter.ReceiptRVAdapter;
 import com.example.internalstorageapp.model.Receipt;
 import com.example.internalstorageapp.util.Logger;
 
@@ -33,7 +37,7 @@ import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ReceiptRVAdapter.ReceiptAdapterDelegate {
 
     private String fileName = "MyAppDB.html";
     private String directoryPath = "MyAppFolder";
@@ -65,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
 
         external = new File(getExternalFilesDir(directoryPath), fileName);
 
+        DividerItemDecoration itemDecoration = new DividerItemDecoration(this, RecyclerView.VERTICAL);
+        informationRecyclerView.addItemDecoration(itemDecoration);
 
         saveReceiptButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String getInput() {
 
-        String input = titleEditText.getText() + "-$" + priceEditText.getText()+"\n";
+        String input = titleEditText.getText() + "-$" + priceEditText.getText() + "\n";
 
         titleEditText.setText("");
         priceEditText.setText("");
@@ -159,15 +165,27 @@ public class MainActivity extends AppCompatActivity {
 
             while ((input = bufferedReader.readLine()) != null) {
                 Logger.logDebug(input);
-               receiptList.add(new Receipt(input.split(delimiter)[0], input.split(delimiter)[1]));
+                receiptList.add(new Receipt(input.split(delimiter)[0], input.split(delimiter)[1]));
             }
             bufferedReader.close();
 
-            informationListView.setAdapter(new ReceiptAdapter(receiptList));
+//            informationListView.setAdapter(new ReceiptAdapter(receiptList));
+            LinearLayoutManager layoutMgr = new LinearLayoutManager(this);
+            informationRecyclerView.setLayoutManager(layoutMgr);
+            informationRecyclerView.setAdapter(new ReceiptRVAdapter(receiptList, this));
+
 
         } catch (IOException e) {
             Logger.logError(new Throwable(e.getMessage()));
         }
+
+    }
+
+    @Override
+    public void receiptSelected(Receipt selectedReceipt) {
+        Intent intent = new Intent(this, SecondActivity.class);
+        intent.putExtra("my_parcel", selectedReceipt);
+        startActivity(intent);
 
     }
 
