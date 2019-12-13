@@ -28,7 +28,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/receipt_title_edittext" />
 
-    <ListView
+    <!--<ListView
         android:id="@+id/main_listview"
         android:layout_margin="16dp"
         android:layout_width="0dp"
@@ -36,7 +36,20 @@
         app:layout_constraintBottom_toTopOf="@+id/save_receipt_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/price_edittext" />
+        app:layout_constraintTop_toBottomOf="@id/price_edittext" />-->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/main_recyclerview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/save_receipt_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/price_edittext"
+        />
+
+
 
     <Button
         android:id="@+id/save_receipt_button"

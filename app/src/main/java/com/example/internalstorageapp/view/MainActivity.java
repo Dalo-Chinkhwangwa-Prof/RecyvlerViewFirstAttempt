@@ -1,6 +1,7 @@
 package com.example.internalstorageapp.view;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -46,8 +47,11 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.receipt_title_edittext)
     public EditText titleEditText;
 
-    @BindView(R.id.main_listview)
-    public ListView informationListView;
+//    @BindView(R.id.main_listview)
+//    public ListView informationListView;
+
+    @BindView(R.id.main_recyclerview)
+    public RecyclerView informationRecyclerView;
 
     private File external;
 
@@ -129,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
     private void writeToExternalStorage() {
 
         try {
-            FileOutputStream fileOutputStream = new FileOutputStream(external, false);
+            FileOutputStream fileOutputStream = new FileOutputStream(external, true);
 
             String input = getInput();
             fileOutputStream.write(input.getBytes());
@@ -146,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
     private void readFromExternalStorage() {
         String delimiter = "-";
         try {
+            receiptList = new ArrayList<Receipt>();
             FileInputStream fileInputStream = new FileInputStream(external);
             InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
